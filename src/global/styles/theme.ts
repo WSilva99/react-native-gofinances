@@ -14,6 +14,7 @@ export default {
     shape: 'rgba(255, 255, 255, 1)',
     title: '#363f5f',
     text: '#969cb2',
+    text_dark: '#262f3f',
     background: '#f0f2f5'
   },
   fonts: {
