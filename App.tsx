@@ -8,8 +8,10 @@ import {
 } from '@expo-google-fonts/poppins';
 
 import default_theme from './src/global/styles/theme';
+
 import { Dashboard } from './src/screens/Dashboard';
-import AppLoading from 'expo-app-loading';
+import { Register } from './src/screens/Register';
+// import AppLoading from 'expo-app-loading';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -26,7 +28,8 @@ export default function App() {
     <ThemeProvider theme={default_theme}>
       <StatusBar barStyle={'default'} />
       <SafeAreaView style={{flex: 1}}>
-        <Dashboard />
+        {/* <Dashboard /> */}
+        <Register />
       </SafeAreaView>
     </ThemeProvider>
   );
