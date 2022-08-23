@@ -10,8 +10,8 @@ interface TransactionTypeButtonProps extends TouchableOpacityProps  {
 export function TransactionTypeButton({title, type, isActive, ...props}: TransactionTypeButtonProps) {
   return (
     <Container type={type} {...props} isActive={isActive}>
-      <Icon name={type === 'deposit' ? 'arrow-up-circle' : 'arrow-down-circle'} type={type} />
-      <Title type={type}>{title}</Title>
+      <Icon isActive={isActive} name={type === 'deposit' ? 'arrow-up-circle' : 'arrow-down-circle'} type={type} />
+      <Title isActive={isActive} type={type}>{title}</Title>
     </Container>
   )
 }

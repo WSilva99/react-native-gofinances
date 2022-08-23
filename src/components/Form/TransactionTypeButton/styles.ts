@@ -21,22 +21,28 @@ export const Container = styled.TouchableOpacity<ButtonProps>`
   border-radius: 8px;
   padding: 16px 32px;
   ${({ isActive, type }) => isActive && type === 'deposit' && css`
-    background-color: ${({ theme }) => theme.colors.success_light};
-    border-color: ${({ theme }) => theme.colors.success_light};
+    background-color: ${({ theme }) => theme.colors.success};
+    border-color: ${({ theme }) => theme.colors.success};
   `}
     ${({ isActive, type }) => isActive && type === 'withdraw' && css`
-    background-color: ${({ theme }) => theme.colors.attention_light};
-    border-color: ${({ theme }) => theme.colors.attention_light};
+    background-color: ${({ theme }) => theme.colors.attention};
+    border-color: ${({ theme }) => theme.colors.attention};
   `}
 `;
 
-export const Icon = styled(Feather)<TypeProps>`
+export const Icon = styled(Feather)<ButtonProps>`
   font-size: ${RFValue(24)}px;
   color: ${({ theme, type }) => type === 'deposit' ? theme.colors.success : theme.colors.attention};
   margin-right: 12px;
+  ${({ isActive, type }) => isActive && css`
+    color: ${({ theme }) => theme.colors.shape};
+  `};
 `;
 
-export const Title = styled.Text`
+export const Title = styled.Text<ButtonProps>`
   font-family: ${({ theme }) => theme.fonts.regular};
   font-size: ${RFValue(14)}px;
+  ${({ isActive, type }) => isActive && css`
+    color: ${({ theme }) => theme.colors.shape};
+  `};
 `;
