@@ -17,7 +17,7 @@ export const Container = styled.TouchableOpacity<ButtonProps>`
   justify-content: center;
   border-width: 1.5px;
   border-style: solid;
-  border-color: ${({ theme, type }) => type === 'deposit' ? theme.colors.success : theme.colors.attention};
+  border-color: ${({ theme, type }) => type === 'deposit' ? theme.colors.success_light : theme.colors.attention_light};
   border-radius: 8px;
   padding: 16px 32px;
   ${({ isActive, type }) => isActive && type === 'deposit' && css`
