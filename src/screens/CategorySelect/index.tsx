@@ -15,6 +15,11 @@ interface CategorySelectProps {
 }
 
 export function CategorySelect({category, setCategory, closeSelectCategory}: CategorySelectProps) {
+
+  function handleCategorySelect(category: Category) {
+    setCategory(category);
+  }
+
   return (
     <Container>
       <Header>
@@ -26,7 +31,10 @@ export function CategorySelect({category, setCategory, closeSelectCategory}: Cat
         style={{ flex: 1, width: "100%" }}
         keyExtractor={(item) => item.key}
         renderItem={({ item }) => (
-          <Category onPress={() => setCategory(item)}>
+          <Category
+            isActive={category.key === item.key}
+            onPress={() => handleCategorySelect(item)}
+          >
             <CategoryIcon name={item.icon} />
             <CategoryName>{item.name}</CategoryName>
           </Category>
