@@ -65,7 +65,7 @@ export function Dashboard() {
               <UserName>Walmir</UserName>
             </User>
           </UserInfo>
-          <LogoutButton onPress={() => {}}>
+          <LogoutButton onPress={() => {console.log('press')}}>
             <Icon name={'power'} />
           </LogoutButton>
         </Header>

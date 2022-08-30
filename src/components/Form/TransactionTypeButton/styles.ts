@@ -1,7 +1,6 @@
 import styled, { css } from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
 import { RFValue } from "react-native-responsive-fontsize";
-import { RectButton } from "react-native-gesture-handler";
 
 interface TypeProps {
   type: "deposit" | "withdraw";
@@ -11,7 +10,7 @@ interface ButtonProps extends TypeProps {
   isActive: boolean;
 }
 
-export const Container = styled(RectButton)<ButtonProps>`
+export const Container = styled.TouchableOpacity<ButtonProps>`
   width: 48%;
   flex-direction: row;
   align-items: center;
