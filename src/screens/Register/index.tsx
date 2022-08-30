@@ -16,8 +16,14 @@ interface FormData {
 }
 
 const transactionSchema = Yup.object().shape({
-  description: Yup.string().required("Descrição é obrigatória"),
-  amount: Yup.number().typeError("Informe um valor numérico").positive("O valor não pode ser negativo").required("O valor é obrigatório"),
+  description: Yup
+    .string()
+    .required("Descrição é obrigatória"),
+  amount: Yup
+    .number()
+    .typeError("Informe um valor numérico")
+    .positive("O valor não pode ser negativo")
+    .required("O valor é obrigatório"),
 });
 
 export function Register() {
@@ -29,7 +35,11 @@ export function Register() {
     name: 'Categoria'
   });
 
-  const { control, handleSubmit } = useForm({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
     resolver: yupResolver(transactionSchema)
   });
   
@@ -50,11 +60,9 @@ export function Register() {
       return Alert.alert('Selecione o tipo da transação');
     }
 
-    if (selectedCategory.key !== 'category') {
+    if (selectedCategory.key === 'category') {
       return Alert.alert('Selecione a categoria');
     }
-
-
 
     const data = {
       description: form.description,
@@ -79,12 +87,14 @@ export function Register() {
               autoCapitalize="sentences"
               autoCorrect={false}
               placeholder="Descrição"
+              error={errors.description?.message}
             />
             <InputForm
               name="amount"
               control={control}
               keyboardType="numeric"
               placeholder="Valor"
+              error={errors.amount?.message}
             />
             <TransactionsTypes>
               <TransactionTypeButton isActive={transactionType === 'deposit'} title="Entrada" type="deposit" onPress={() => handleSelectTransactionType('deposit')} />
@@ -92,7 +102,7 @@ export function Register() {
             </TransactionsTypes>
             <CategorySelectButton placeholder={selectedCategory.name} onPress={handleOpenSelectCategoryModal} />
           </Fields>
-          <Button title="Registrar" onPress={handleSubmit(handleRegister)} />
+          <Button title="Registrar" onPress={handleSubmit(() => handleRegister)} /> 
         </Form>
         <Modal visible={categoryModalOpen}>
           <CategorySelect

@@ -1,4 +1,4 @@
-import { SafeAreaView, Text, StatusBar } from 'react-native';
+import { Text, StatusBar } from 'react-native';
 import { ThemeProvider } from 'styled-components';
 import {
   useFonts,
@@ -9,7 +9,8 @@ import {
 
 import default_theme from './src/global/styles/theme';
 
-import { Register } from './src/screens/Register';
+import { NavigationContainer } from '@react-navigation/native';
+import { AppRoutes } from './src/routes/app.routes';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -25,9 +26,9 @@ export default function App() {
   return (
     <ThemeProvider theme={default_theme}>
       <StatusBar barStyle={'default'} />
-      <SafeAreaView style={{flex: 1}}>
-        <Register />
-      </SafeAreaView>
+      <NavigationContainer>
+        <AppRoutes />
+      </NavigationContainer>
     </ThemeProvider>
   );
 }

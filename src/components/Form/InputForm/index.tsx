@@ -1,14 +1,15 @@
 import { Control, Controller } from "react-hook-form";
 import { TextInputProps } from "react-native";
 import { Input } from "../Input";
-import { Container } from "./styles";
+import { Container, Error } from "./styles";
 
 interface InputFormProps extends TextInputProps {
   control: Control;
   name: string;
+  error: any; // Resolver tipagem
 }
 
-export function InputForm({control, name, ...props}: InputFormProps) {
+export function InputForm({control, name, error, ...props}: InputFormProps) {
   return (
     <Container>
       <Controller
@@ -18,6 +19,7 @@ export function InputForm({control, name, ...props}: InputFormProps) {
           <Input onChangeText={onChange} value={value} {...props} />
         )}
       />
+      {!!error && <Error>{error}</Error>}
     </Container>
   );
 }

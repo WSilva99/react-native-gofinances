@@ -4,6 +4,7 @@ import { Feather } from "@expo/vector-icons";
 import { getBottomSpace, getStatusBarHeight } from "react-native-iphone-x-helper";
 import { FlatList } from "react-native";
 import { TransactionData } from ".";
+import { BorderlessButton } from "react-native-gesture-handler";
 
 export const Container = styled.View`
   flex: 1;
@@ -43,6 +44,13 @@ export const UserName = styled.Text`
   font-size: ${RFValue(18)}px;
   color: ${({ theme }) => theme.colors.shape};
   font-family: ${({ theme }) => theme.fonts.bold};
+`;
+
+export const LogoutButton = styled(BorderlessButton)`
+  width: ${RFValue(24)}px;
+  height: ${RFValue(24)}px;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const Icon = styled(Feather)`
