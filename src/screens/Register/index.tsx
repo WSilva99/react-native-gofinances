@@ -1,14 +1,30 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Alert,
+  Keyboard,
+  Modal, 
+  TouchableWithoutFeedback
+} from "react-native";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Alert, Keyboard, Modal, TouchableWithoutFeedback } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import uuid from "react-native-uuid";
+
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigation } from "@react-navigation/native";
+
 import { Button } from "../../components/Form/Button";
 import { CategorySelectButton } from "../../components/Form/CategorySelectButton";
 import { InputForm } from "../../components/Form/InputForm/";
 import { TransactionTypeButton } from "../../components/Form/TransactionTypeButton";
 import { CategorySelect } from "../CategorySelect";
-import { Container, Fields, Form, Header, Title, TransactionsTypes } from "./styles";
+
+import { Container,
+  Fields, 
+  Form, 
+  Header, 
+  Title, 
+  TransactionsTypes
+} from "./styles";
 
 interface FormData {
   description: string;
@@ -38,10 +54,13 @@ export function Register() {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm({
     resolver: yupResolver(transactionSchema)
   });
+
+  const navigation = useNavigation();
   
   function handleSelectTransactionType (type: 'deposit' | 'withdraw') {
     setTransactionType(type);
@@ -55,7 +74,7 @@ export function Register() {
     setCategoryModalOpen(false);
   }
 
-  function handleRegister(form: FormData) {
+  async function handleRegister(form: FormData) {
     if (!transactionType) {
       return Alert.alert('Selecione o tipo da transação');
     }
@@ -64,13 +83,36 @@ export function Register() {
       return Alert.alert('Selecione a categoria');
     }
 
-    const data = {
+    const newTransaction = {
+      id: String(uuid.v4()),
       description: form.description,
       amount: form.amount,
       transactionType,
-      category: selectedCategory.key
+      category: selectedCategory.key,
+      date: new Date()
     }
-    console.log(data);
+    
+    try {
+      const dataKey = "@gofinances:transactions";
+      const data = await AsyncStorage.getItem(dataKey);
+      const dataPrev = data ? JSON.parse(data) : [];
+      const dataCurr = [...dataPrev, newTransaction];
+      await AsyncStorage.setItem(dataKey, JSON.stringify(dataCurr));
+
+      reset();
+      setTransactionType('');
+      setSelectedCategory({
+        key: 'category',
+        name: 'Categoria'
+      });
+      // Resolvendo tipagem bugada
+      navigation.navigate("Home" as never);
+    } catch(error) {
+      console.log(error);
+      Alert.alert('Erro ao registrar transação');
+    }
+
+    console.log("registoru");
   }
 
   return (
@@ -102,7 +144,8 @@ export function Register() {
             </TransactionsTypes>
             <CategorySelectButton placeholder={selectedCategory.name} onPress={handleOpenSelectCategoryModal} />
           </Fields>
-          <Button title="Registrar" onPress={handleSubmit(() => handleRegister)} /> 
+          {/* Modo gambiarra para resolver tipagem */}
+          <Button title="Registrar" onPress={handleSubmit(handleRegister as unknown as any)} /> 
         </Form>
         <Modal visible={categoryModalOpen}>
           <CategorySelect

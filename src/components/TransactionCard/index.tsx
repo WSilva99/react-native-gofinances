@@ -7,7 +7,7 @@ interface Category {
 
 export interface TransactionProps {
   type: 'deposit' | 'withdraw';
-  title: string;
+  description: string;
   amount: string;
   date: string;
   category: Category;
@@ -20,7 +20,7 @@ interface TransactionCardProps {
 export function TransactionCard({ data }: TransactionCardProps) {
   return (
     <Container>
-      <Title>{data.title}</Title>
+      <Title>{data.description}</Title>
       <Amount type={data.type}>{(data.type === 'deposit') ? data.amount : `- ${data.amount}`}</Amount>
       <Footer>
         <Category>
