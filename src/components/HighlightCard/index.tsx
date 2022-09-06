@@ -3,7 +3,7 @@ import { Amount, Container, Content, Header, Icon, LastTransaction, Title } from
 interface HighlightCardProps {
   type: 'deposit' | 'withdraw' | 'total';
   amount: string;
-  lastTransaction: string;
+  lastTransaction?: string;
 }
 
 const TitleCard = {

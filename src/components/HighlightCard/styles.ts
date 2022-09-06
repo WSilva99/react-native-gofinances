@@ -18,7 +18,7 @@ export const Container = styled.View<TypeProps>`
   border-radius: 8px;
   padding: 18px 24px;
   padding-bottom: ${RFValue(40)}px;
-  margin-left: 16px;
+  margin-right: ${({ type }) => type === 'total' ? 0 : 16}px;
 `;
 
 export const Header = styled.View`

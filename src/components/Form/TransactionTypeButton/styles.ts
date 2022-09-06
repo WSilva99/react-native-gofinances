@@ -1,25 +1,23 @@
 import styled, { css } from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
 import { RFValue } from "react-native-responsive-fontsize";
+import { RectButton, RectButtonProps } from "react-native-gesture-handler";
 
 interface TypeProps {
   type: "deposit" | "withdraw";
 }
 
-interface ButtonProps extends TypeProps {
+interface ButtonProps extends RectButtonProps {
   isActive: boolean;
+  type: "deposit" | "withdraw";
 }
 
-export const Container = styled.TouchableOpacity<ButtonProps>`
+export const Container = styled.View<ButtonProps>`
   width: 48%;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
   border-width: 1.5px;
   border-style: solid;
   border-color: ${({ theme, type }) => type === 'deposit' ? theme.colors.success_light : theme.colors.attention_light};
   border-radius: 8px;
-  padding: 16px 32px;
   ${({ isActive, type }) => isActive && type === 'deposit' && css`
     background-color: ${({ theme }) => theme.colors.success};
     border-color: ${({ theme }) => theme.colors.success};
@@ -28,6 +26,14 @@ export const Container = styled.TouchableOpacity<ButtonProps>`
     background-color: ${({ theme }) => theme.colors.attention};
     border-color: ${({ theme }) => theme.colors.attention};
   `}
+`;
+
+export const Button = styled(RectButton)<ButtonProps>`
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px;
 `;
 
 export const Icon = styled(Feather)<ButtonProps>`

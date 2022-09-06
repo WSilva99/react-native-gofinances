@@ -1,4 +1,4 @@
-import { Text, StatusBar } from 'react-native';
+import { View, Text, StatusBar, ActivityIndicator } from 'react-native';
 import { ThemeProvider } from 'styled-components';
 import {
   useFonts,
@@ -7,10 +7,16 @@ import {
   Poppins_700Bold 
 } from '@expo-google-fonts/poppins';
 
+// Importando pq crasha no android
+import "intl";
+import "intl/locale-data/jsonp/pt-BR";
+
 import default_theme from './src/global/styles/theme';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { AppRoutes } from './src/routes/app.routes';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { LoadIndicator } from './src/components/LoadIndicator';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -19,16 +25,20 @@ export default function App() {
     Poppins_700Bold,
   });
 
-  if (!fontsLoaded) {
-    return <Text>Load</Text>;
-  }
-
   return (
-    <ThemeProvider theme={default_theme}>
-      <StatusBar barStyle={'default'} />
-      <NavigationContainer>
-        <AppRoutes />
-      </NavigationContainer>
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ThemeProvider theme={default_theme}>
+        <StatusBar barStyle={'default'} />
+
+        { !fontsLoaded ? (
+          <LoadIndicator />
+        ) : (
+          <NavigationContainer>
+            <AppRoutes />
+          </NavigationContainer>
+        )}
+        
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }

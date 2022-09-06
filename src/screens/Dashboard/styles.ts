@@ -5,6 +5,12 @@ import { getBottomSpace, getStatusBarHeight } from "react-native-iphone-x-helper
 import { FlatList } from "react-native";
 import { TransactionData } from ".";
 
+export const LoadingContainer = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
+
 export const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.background};
@@ -56,8 +62,9 @@ export const HighlightCards = styled.ScrollView.attrs({
   horizontal: true,
   showsHorizontalScrollIndicator: false,
   contentContainerStyle: {
-    paddingHorizontal: 12,
-  }
+    paddingHorizontal: 24,
+  },
+
 })`
   width: 100%;
   position: absolute;

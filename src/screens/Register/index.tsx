@@ -21,10 +21,9 @@ import { CategorySelect } from "../CategorySelect";
 import { Container,
   Fields, 
   Form, 
-  Header, 
-  Title, 
   TransactionsTypes
 } from "./styles";
+import { Header } from "../../components/Header";
 
 interface FormData {
   description: string;
@@ -37,8 +36,14 @@ const transactionSchema = Yup.object().shape({
     .required("Descrição é obrigatória"),
   amount: Yup
     .number()
+    .transform((value, originalValue) => {
+      if (originalValue.includes(",")) {
+        return Number(originalValue.replace(",", "."));
+      }
+      return Number(originalValue);
+    })
     .typeError("Informe um valor numérico")
-    .positive("O valor não pode ser negativo")
+    .moreThan(0, "O valor deve ser maior que 0")
     .required("O valor é obrigatório"),
 });
 
@@ -87,8 +92,8 @@ export function Register() {
       id: String(uuid.v4()),
       description: form.description,
       amount: form.amount,
-      transactionType,
-      category: selectedCategory.key,
+      type: transactionType,
+      categoryKey: selectedCategory.key,
       date: new Date()
     }
     
@@ -111,16 +116,12 @@ export function Register() {
       console.log(error);
       Alert.alert('Erro ao registrar transação');
     }
-
-    console.log("registoru");
   }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Container>
-        <Header>
-          <Title>Cadastro</Title>
-        </Header>
+        <Header title="Cadastro" />
         <Form>
           <Fields>
             <InputForm
