@@ -18,6 +18,9 @@ import { AppRoutes } from './src/routes/app.routes';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { LoadIndicator } from './src/components/LoadIndicator';
 
+import { SignIn } from './src/screens/SignIn';
+import { AuthProvider } from './src/hooks/auth';
+
 export default function App() {
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
@@ -33,9 +36,12 @@ export default function App() {
         { !fontsLoaded ? (
           <LoadIndicator />
         ) : (
-          <NavigationContainer>
-            <AppRoutes />
-          </NavigationContainer>
+          <AuthProvider>
+            {/* <NavigationContainer>
+              <AppRoutes />
+            </NavigationContainer> */}
+            <SignIn />
+          </AuthProvider>
         )}
         
       </ThemeProvider>
