@@ -3,11 +3,19 @@ import { Ionicons } from "@expo/vector-icons";
 import { SignInButton } from "../../components/SignInButton";
 import { RFValue } from "react-native-responsive-fontsize";
 import { useAuth } from "../../hooks/auth";
+import { Alert } from "react-native";
 
 export function SignIn() {
-  const { user } = useAuth();
+  const { signInWithGoogle } = useAuth();
 
-  console.log(user);
+  async function handleSignInWithGoogle() {
+    try {
+      await signInWithGoogle();
+    } catch (error: any) {
+      console.log(error);
+      Alert.alert("Não foi possível conectar a conta Google");
+    }
+  }
 
   return (
     <Container>
@@ -26,6 +34,7 @@ export function SignIn() {
       <Content>
         <SignInButton 
           text="Entrar com Google"
+          onPress={handleSignInWithGoogle}
           icon={
             <Ionicons
               name={'logo-google'}
