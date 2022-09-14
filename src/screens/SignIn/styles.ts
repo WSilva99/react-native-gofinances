@@ -10,7 +10,7 @@ export const Container = styled.View`
 
 export const Header = styled.View`
   width: 100%;
-  height: 80%;
+  height: ${RFPercentage(75)}px;
   background-color: ${({ theme }) => theme.colors.primary};
   align-items: center;
   justify-content: flex-end;
@@ -41,6 +41,6 @@ export const Title = styled.Text`
 
 export const Content = styled.View`
   width: 100%;
-  margin-top: ${RFPercentage(-1)}%;
+  margin-top: ${RFPercentage(-4)}px;
   padding: 0 32px;
 `;

@@ -1,7 +1,10 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Platform } from 'react-native';
+// import { Platform } from 'react-native';
 import { useTheme } from 'styled-components/native';
 import { Feather } from '@expo/vector-icons';
+
+import * as Device from 'expo-device';
+
 import { Dashboard } from '../screens/Dashboard';
 import { Register } from '../screens/Register';
 import { Resume } from '../screens/Resume';
@@ -19,7 +22,7 @@ export function AppRoutes() {
         tabBarLabelPosition: 'beside-icon',
         tabBarStyle: {
           height: 60,
-          paddingBottom: Platform.OS === 'ios' ? 10 : 0,
+          paddingBottom: Device.brand === 'Apple' ? 10 : 0,
         }
       }}
     >

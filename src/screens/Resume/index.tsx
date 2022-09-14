@@ -11,6 +11,7 @@ import { useTheme } from "styled-components";
 import { addMonths, subMonths, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { LoadIndicator } from "../../components/LoadIndicator";
+import { useAuth } from "../../hooks/auth";
 
 interface TransactionData {
   type: 'deposit' | 'withdraw';
@@ -40,6 +41,7 @@ export function Resume() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [totalByCategories, setTotalByCategories] = useState<TotalByCategoryData[]>([]);
 
+  const { user } = useAuth();
   const theme = useTheme();
 
   function handleDateChange(action: 'next' | 'prev') {
@@ -52,7 +54,7 @@ export function Resume() {
 
   async function loadTotalByCategories() {
     setIsLoading(true);
-    const dataKey = "@gofinances:transactions";
+    const dataKey = `@gofinances:transactions:user:${user.id}`;
     const data = await AsyncStorage.getItem(dataKey);
     const dataWithdraws = JSON.parse(data || "[]")
       .filter(

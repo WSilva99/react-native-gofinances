@@ -21,6 +21,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { useTheme } from "styled-components";
 import { LoadIndicator } from "../../components/LoadIndicator";
+import { useAuth } from "../../hooks/auth";
 
 export interface TransactionData extends TransactionProps {
   id: string;
@@ -41,6 +42,7 @@ export function Dashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [transactions, setTransactions] = useState<TransactionData[]>([]);
   const [highlightData, setHighlightData] = useState<HighlightData>({} as HighlightData);
+  const { user, signOut } = useAuth();
 
   const theme = useTheme();
 
@@ -48,17 +50,27 @@ export function Dashboard() {
     transactions: TransactionData[],
     type: 'deposit' | 'withdraw'
   ) {
-    const dateTransaction = transactions
-      .filter(transaction => transaction.type === type)
+    const filtredTransactions = transactions
+      .filter(transaction => transaction.type === type);
+
+    if (filtredTransactions.length === 0) {
+      return `Não há transações registradas.`;
+    }
+
+    const dateTransaction = filtredTransactions
       .reduce((acc, transaction) => {
         const date: Date = new Date(transaction.date);
         return (acc > date) ? acc : date;
       }, new Date(0));
-
+    
     return `Última ${type === 'deposit' ? 'entrada' : 'saída'} dia ${dateTransaction.getDate()} de ${dateTransaction.toLocaleString('pt-BR', { month: 'long' })}`;
   }
 
   function getPeriodTransactions(transactions: TransactionData[]) {
+    if (transactions.length === 0) {
+      return `Não há transações registradas.`;
+    }
+
     const startDate = transactions.reduce((acc, transaction) => {
       const date: Date = new Date(transaction.date);
       return (acc > date) ? date : acc;
@@ -74,7 +86,7 @@ export function Dashboard() {
 
   async function loadTransactions() {
     setIsLoading(true);
-    const dataKey = "@gofinances:transactions";
+    const dataKey = `@gofinances:transactions:user:${user.id}`;
     const data = await AsyncStorage.getItem(dataKey);
     const dataCurr = JSON.parse(data || "[]");
 
@@ -132,20 +144,18 @@ export function Dashboard() {
     }, [])
   );
 
-
-
   return (
     <>
       <Container>
         <Header>
           <UserInfo>
-            <Photo source={{ uri: "https://avatars.githubusercontent.com/u/69635394?v=4" }} />
+            <Photo source={{ uri: user.photo }} />
             <User>
               <UserGreeting>Olá,</UserGreeting>
-              <UserName>Walmir</UserName>
+              <UserName>{user.name}</UserName>
             </User>
           </UserInfo>
-          <LogoutButton onPress={() => { console.log('press') }}>
+          <LogoutButton onPress={signOut}>
             <Icon name={'power'} />
           </LogoutButton>
         </Header>

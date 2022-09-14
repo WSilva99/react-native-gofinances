@@ -1,4 +1,4 @@
-import { View, Text, StatusBar, ActivityIndicator } from 'react-native';
+import { StatusBar } from 'react-native';
 import { ThemeProvider } from 'styled-components';
 import {
   useFonts,
@@ -13,13 +13,11 @@ import "intl/locale-data/jsonp/pt-BR";
 
 import default_theme from './src/global/styles/theme';
 
-import { NavigationContainer } from '@react-navigation/native';
-import { AppRoutes } from './src/routes/app.routes';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { LoadIndicator } from './src/components/LoadIndicator';
 
-import { SignIn } from './src/screens/SignIn';
-import { AuthProvider } from './src/hooks/auth';
+import { AuthProvider, useAuth } from './src/hooks/auth';
+import { Routes } from './src/routes';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -28,19 +26,18 @@ export default function App() {
     Poppins_700Bold,
   });
 
+  const { loadingStorageUser } = useAuth();
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider theme={default_theme}>
         <StatusBar barStyle={'default'} />
 
-        { !fontsLoaded ? (
+        { !fontsLoaded || loadingStorageUser ? (
           <LoadIndicator />
         ) : (
           <AuthProvider>
-            {/* <NavigationContainer>
-              <AppRoutes />
-            </NavigationContainer> */}
-            <SignIn />
+            <Routes />
           </AuthProvider>
         )}
         

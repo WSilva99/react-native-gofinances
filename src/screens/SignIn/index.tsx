@@ -1,19 +1,41 @@
-import { Container, Content, Header, Logo, Title, VP } from "./styles";
+import { useState } from "react";
+import { ActivityIndicator, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { SignInButton } from "../../components/SignInButton";
 import { RFValue } from "react-native-responsive-fontsize";
+import * as Device from 'expo-device';
+
+import { Container, Content, Header, Logo, Title, VP } from "./styles";
+import { useTheme } from "styled-components";
+
 import { useAuth } from "../../hooks/auth";
-import { Alert } from "react-native";
+
+import { SignInButton } from "../../components/SignInButton";
 
 export function SignIn() {
-  const { signInWithGoogle } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const { signInWithGoogle, signInWithApple } = useAuth();
+
+  const theme = useTheme();
 
   async function handleSignInWithGoogle() {
     try {
+      setIsLoading(true);
       await signInWithGoogle();
     } catch (error: any) {
       console.log(error);
       Alert.alert("Não foi possível conectar a conta Google");
+      setIsLoading(false);
+    }
+  }
+
+  async function handleSignInWithApple() {
+    try {
+      setIsLoading(true);
+      await signInWithApple();
+    } catch (error: any) {
+      console.log(error);
+      Alert.alert("Não foi possível conectar a conta Apple");
+      setIsLoading(false);
     }
   }
 
@@ -42,15 +64,19 @@ export function SignIn() {
             />
           }
         />
-        <SignInButton 
-          text="Entrar com Apple"
-          icon={
-            <Ionicons
-              name={'logo-apple'}
-              size={RFValue(24)}
-            />
-          }
-        />
+        { Device.brand === 'Apple' && (
+          <SignInButton 
+            text="Entrar com Apple"
+            onPress={handleSignInWithApple}
+            icon={
+              <Ionicons
+                name={'logo-apple'}
+                size={RFValue(24)}
+              />
+            }
+          />
+        )}
+        { isLoading && <ActivityIndicator color={theme.colors.shape} size="large" style={{marginTop: 18}} /> }
       </Content>
     </Container>
   )
